@@ -1,13 +1,11 @@
-/**
- * Base webpack config used across other specific configs
- */
+const path = require('path');
+const webpack = require('webpack');
+// 使用 require 完美绕过 "import type: json" 的报错
+const pkg = require('../app/package.json');
+const externals = pkg.dependencies || {};
 
-import path from 'path';
-import webpack from 'webpack';
-import { dependencies as externals } from '../app/package.json';
-
-export default {
-  externals: [...Object.keys(externals || {})],
+module.exports = {
+  externals: Object.keys(externals),
 
   module: {
     rules: [
@@ -16,9 +14,7 @@ export default {
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-          },
+          options: { cacheDirectory: true },
         },
       },
     ],
@@ -26,13 +22,9 @@ export default {
 
   output: {
     path: path.join(__dirname, '..', 'app'),
-    // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2',
   },
 
-  /**
-   * Determine the array of extensions that should be used to resolve modules.
-   */
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     modules: [path.join(__dirname, '..', 'app'), 'node_modules'],
@@ -42,7 +34,5 @@ export default {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
     }),
-
-    new webpack.NamedModulesPlugin(),
   ],
 };

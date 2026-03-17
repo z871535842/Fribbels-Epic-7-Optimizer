@@ -2,26 +2,27 @@ const stringSimilarity = require('string-similarity');
 const tinygradient = require('tinygradient');
 const colorPicker = require('../colorPicker');
 
-var lightGradient = {gradient:tinygradient('#ffffff', '#8fed78')};
-var lightScoreGradient = {gradient:tinygradient('#ffa8a8', '#ffffe5', '#8fed78')};
+const lightGradient = { gradient: tinygradient('#ffffff', '#8fed78') };
+const lightScoreGradient = {
+    gradient: tinygradient('#ffa8a8', '#ffffe5', '#8fed78'),
+};
 
-var darkGradient = colorPicker.get2Colors();
-// var darkGradient = tinygradient('#5A1A06', '#38821F');//Item Grid: Values
-var darkScoreGradient = tinygradient('#5A1A06', '#343127', '#38821F'); //Not used?
-var darkScoreGradient2 = colorPicker.getColors();
-// var darkScoreGradient2 = tinygradient([
+const darkGradient = colorPicker.get2Colors();
+// let darkGradient = tinygradient('#5A1A06', '#38821F');//Item Grid: Values
+const darkScoreGradient = tinygradient('#5A1A06', '#343127', '#38821F'); //Not used?
+const darkScoreGradient2 = colorPicker.getColors();
+// let darkScoreGradient2 = tinygradient([
 //     {color: '#5A1A06', pos: 0}, // red
 //     {color: '#343127', pos: 0.4},
 //     {color: '#38821F', pos: 1} // green
 // ]); //Item Grid: Score
 
-var gradient = lightGradient;
-var scoreGradient = lightScoreGradient;
-
+let gradient = lightGradient;
+let scoreGradient = lightScoreGradient;
 
 global.itemsGrid = null;
-var currentAggregate = {};
-var selectedCell = null;
+const currentAggregate = {};
+let selectedCell = null;
 
 module.exports = {
     async editedItem() {
@@ -42,29 +43,28 @@ module.exports = {
         }
 
         try {
-            itemsGrid.gridOptions.api.refreshView()
-        } catch (e) {
-
-        }
+            itemsGrid.gridOptions.api.refreshView();
+        } catch (e) {}
     },
 
     initialize: async () => {
+        let localeText; 
+
         if (i18next.language == 'zh') {
-          var localeText = AG_GRID_LOCALE_ZH;
+            localeText = AG_GRID_LOCALE_ZH;
         } else if (i18next.language == 'zh-TW') {
-          var localeText = AG_GRID_LOCALE_ZH_TW;
+            localeText = AG_GRID_LOCALE_ZH_TW;
         } else if (i18next.language == 'fr') {
-          var localeText = AG_GRID_LOCALE_FR;
+            localeText = AG_GRID_LOCALE_FR;
         } else if (i18next.language == 'ja') {
-          var localeText = AG_GRID_LOCALE_JA;
+            localeText = AG_GRID_LOCALE_JA;
         } else if (i18next.language == 'ko') {
-          var localeText = AG_GRID_LOCALE_KO;
+            localeText = AG_GRID_LOCALE_KO;
         } else if (i18next.language == 'ru') {
-          var localeText = AG_GRID_LOCALE_RU;
+            localeText = AG_GRID_LOCALE_RU;
         } else {
-          var localeText = AG_GRID_LOCALE_EN;
+            localeText = AG_GRID_LOCALE_EN;
         }
-        console.log('localeText:'+localeText);
 
         const getAllItemsResponse = await Api.getAllItems();
         const gridOptions = {
@@ -77,37 +77,191 @@ module.exports = {
             },
 
             columnDefs: [
-                {headerName: i18next.t('Set'), field: 'set', cellRenderer: (params) => renderSets(params.value)},
-                {headerName: i18next.t('Gear'), field: 'gear', cellRenderer: (params) => renderGear(params.value)},
-                {headerName: i18next.t('Rank'), field: 'rank', cellRenderer: (params) => i18next.t(params.value), width: 50},
-                {headerName: i18next.t('Level'), field: 'level', filter: 'agNumberColumnFilter'},
-                {headerName: i18next.t('Enhance'), field: 'enhance', width: 60, filter: 'agNumberColumnFilter'},
-                {headerName: i18next.t('Main'), field: 'main.type', width: 100, cellRenderer: (params) => renderStat(i18next.t(params.value))},
-                {headerName: i18next.t('Value'), field: 'main.value', width: 60},
-                {headerName: i18next.t('Atk%'), field: 'augmentedStats.AttackPercent', width: 60, filter: 'agNumberColumnFilter', cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Atk'), field: 'augmentedStats.Attack', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Spd'), field: 'augmentedStats.Speed', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Cr'), field: 'augmentedStats.CriticalHitChancePercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Cd'), field: 'augmentedStats.CriticalHitDamagePercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Hp%'), field: 'augmentedStats.HealthPercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Hp'), field: 'augmentedStats.Health', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Def%'), field: 'augmentedStats.DefensePercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Def'), field: 'augmentedStats.Defense', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Eff'), field: 'augmentedStats.EffectivenessPercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Res'), field: 'augmentedStats.EffectResistancePercent', width: 60, filter: 'agNumberColumnFilter',cellRenderer: (params) => params.value == 0 ? "" : params.value},
-                {headerName: i18next.t('Score'), field: 'reforgedWss', width: 50, cellStyle: scoreColumnGradient},
-                {headerName: i18next.t('dScore'), field: 'dpsWss', width: 50, cellStyle: scoreColumnGradient},
-                {headerName: i18next.t('sScore'), field: 'supportWss', width: 50, cellStyle: scoreColumnGradient},
-                {headerName: i18next.t('cScore'), field: 'combatWss', width: 50, cellStyle: scoreColumnGradient},
-                {headerName: i18next.t('Equipped'), field: 'equippedByName', width: 120, cellRenderer: (params) => renderStat(i18next.t(params.value))},
+                {
+                    headerName: i18next.t('Set'),
+                    field: 'set',
+                    cellRenderer: (params) => renderSets(params.value),
+                },
+                {
+                    headerName: i18next.t('Gear'),
+                    field: 'gear',
+                    cellRenderer: (params) => renderGear(params.value),
+                },
+                {
+                    headerName: i18next.t('Rank'),
+                    field: 'rank',
+                    cellRenderer: (params) => i18next.t(params.value),
+                    width: 50,
+                },
+                {
+                    headerName: i18next.t('Level'),
+                    field: 'level',
+                    filter: 'agNumberColumnFilter',
+                },
+                {
+                    headerName: i18next.t('Enhance'),
+                    field: 'enhance',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                },
+                {
+                    headerName: i18next.t('Main'),
+                    field: 'main.type',
+                    width: 100,
+                    cellRenderer: (params) =>
+                        renderStat(i18next.t(params.value)),
+                },
+                {
+                    headerName: i18next.t('Value'),
+                    field: 'main.value',
+                    width: 60,
+                },
+                {
+                    headerName: i18next.t('Atk%'),
+                    field: 'augmentedStats.AttackPercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Atk'),
+                    field: 'augmentedStats.Attack',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Spd'),
+                    field: 'augmentedStats.Speed',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Cr'),
+                    field: 'augmentedStats.CriticalHitChancePercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Cd'),
+                    field: 'augmentedStats.CriticalHitDamagePercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Hp%'),
+                    field: 'augmentedStats.HealthPercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Hp'),
+                    field: 'augmentedStats.Health',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Def%'),
+                    field: 'augmentedStats.DefensePercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Def'),
+                    field: 'augmentedStats.Defense',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Eff'),
+                    field: 'augmentedStats.EffectivenessPercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Res'),
+                    field: 'augmentedStats.EffectResistancePercent',
+                    width: 60,
+                    filter: 'agNumberColumnFilter',
+                    cellRenderer: (params) =>
+                        params.value == 0 ? '' : params.value,
+                },
+                {
+                    headerName: i18next.t('Score'),
+                    field: 'reforgedWss',
+                    width: 50,
+                    cellStyle: scoreColumnGradient,
+                },
+                {
+                    headerName: i18next.t('dScore'),
+                    field: 'dpsWss',
+                    width: 50,
+                    cellStyle: scoreColumnGradient,
+                },
+                {
+                    headerName: i18next.t('sScore'),
+                    field: 'supportWss',
+                    width: 50,
+                    cellStyle: scoreColumnGradient,
+                },
+                {
+                    headerName: i18next.t('cScore'),
+                    field: 'combatWss',
+                    width: 50,
+                    cellStyle: scoreColumnGradient,
+                },
+                {
+                    headerName: i18next.t('Equipped'),
+                    field: 'equippedByName',
+                    width: 120,
+                    cellRenderer: (params) =>
+                        renderStat(i18next.t(params.value)),
+                },
                 // {headerName: i18next.t('Mconf'), field: 'mconfidence', width: 50},
                 // {headerName: i18next.t('Material'), field: 'material', width: 120},
-                {headerName: i18next.t('Locked'), field: 'locked', cellRenderer: (params) => params.value == true ? i18next.t('yes') : i18next.t('')},
-                {headerName: i18next.t('noMod'), field: 'disableMods',width:100, cellRenderer: (params) => params.value == true ? i18next.t('yes') : i18next.t('')},
+                {
+                    headerName: i18next.t('Locked'),
+                    field: 'locked',
+                    cellRenderer: (params) =>
+                        params.value == true ? i18next.t('yes') : i18next.t(''),
+                },
+                {
+                    headerName: i18next.t('noMod'),
+                    field: 'disableMods',
+                    width: 100,
+                    cellRenderer: (params) =>
+                        params.value == true ? i18next.t('yes') : i18next.t(''),
+                },
                 // {headerName: i18next.t('Actions'), field: 'id', cellRenderer: renderActions},
-                {headerName: i18next.t('Duplicate'), field: 'duplicateId', hide: true},
-                {headerName: 'AllowedMods', field: 'allowedMods', hide: true},
-                {headerName: 'EquippedById', field: 'equippedById', hide: true},
+                {
+                    headerName: i18next.t('Duplicate'),
+                    field: 'duplicateId',
+                    hide: true,
+                },
+                { headerName: 'AllowedMods', field: 'allowedMods', hide: true },
+                {
+                    headerName: 'EquippedById',
+                    field: 'equippedById',
+                    hide: true,
+                },
             ],
             rowSelection: 'multiple',
             pagination: true,
@@ -119,7 +273,11 @@ module.exports = {
             onCellMouseOut: cellMouseOut,
             onCellFocused: cellFocused,
             suppressScrollOnNewData: true,
-            navigateToNextCell: GridRenderer.arrowKeyNavigator(this, "itemsGrid", navigateCallback),
+            navigateToNextCell: GridRenderer.arrowKeyNavigator(
+                this,
+                'itemsGrid',
+                navigateCallback
+            ),
             animateRows: true,
             suppressDragLeaveHidesColumns: true,
             immutableData: true,
@@ -133,36 +291,36 @@ module.exports = {
 
             // onRowSelected: onRowSelected,
         };
-        let gridDiv = document.getElementById('gear-grid');
+        const gridDiv = document.getElementById('gear-grid');
         itemsGrid = new Grid(gridDiv, gridOptions);
         global.itemsGrid = itemsGrid;
-        console.log("!!! itemsGrid", itemsGrid);
+        console.log('!!! itemsGrid', itemsGrid);
 
-        Tooltip.displayItem('item1', "asdf");
+        Tooltip.displayItem('item1', 'asdf');
         // module.exports.redraw();
     },
 
     getSelectedGear: () => {
         const selectedRows = itemsGrid.gridOptions.api.getSelectedRows();
-        console.log("SELECTED ROWS", selectedRows)
+        console.log('SELECTED ROWS', selectedRows);
 
         return selectedRows;
     },
 
     redraw: async (newItem) => {
         if (!itemsGrid) return;
-        console.log("Redraw items", newItem);
-        var selectedNode;
-        const selectedNodes = itemsGrid.gridOptions.api.getSelectedNodes()
+        console.log('Redraw items', newItem);
+        let selectedNode;
+        const selectedNodes = itemsGrid.gridOptions.api.getSelectedNodes();
         if (selectedNodes.length == 1) {
             selectedNode = selectedNodes[0];
         }
 
-        return Api.getAllItems().then(getAllItemsResponse => {
+        return Api.getAllItems().then((getAllItemsResponse) => {
             aggregateCurrentGearStats(getAllItemsResponse.items);
-            itemsGrid.gridOptions.api.setRowData(getAllItemsResponse.items)
+            itemsGrid.gridOptions.api.setRowData(getAllItemsResponse.items);
 
-            var refreshedItem;
+            let refreshedItem;
             if (newItem) {
                 itemsGrid.gridOptions.api.forEachNode((node) => {
                     if (node.data.id == newItem.id) {
@@ -170,7 +328,7 @@ module.exports = {
                         itemsGrid.gridOptions.api.ensureNodeVisible(node);
                         refreshedItem = node.data;
                     }
-                })
+                });
             } else if (selectedNode) {
                 itemsGrid.gridOptions.api.forEachNode((node) => {
                     if (node.data.id == selectedNode.data.id) {
@@ -178,11 +336,10 @@ module.exports = {
                         itemsGrid.gridOptions.api.ensureNodeVisible(node);
                         refreshedItem = node.data;
                     }
-                })
+                });
             } else {
-
             }
-            drawPreview(refreshedItem)
+            drawPreview(refreshedItem);
             updateSelectedCount();
         });
     },
@@ -203,7 +360,8 @@ module.exports = {
         const equippedOrNotFilter = filters.equippedOrNotFilter;
         const modifyFilter = filters.modifyFilter;
 
-        const setFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('set');
+        const setFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('set');
         if (!setFilter) {
             // document.getElementById('checkboxImageClearSets').checked = true;
             setFilterComponent.setModel(null);
@@ -212,11 +370,12 @@ module.exports = {
 
             setFilterComponent.setModel({
                 type: 'startsWith',
-                filter: setFilter
+                filter: setFilter,
             });
         }
 
-        const gearFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('gear');
+        const gearFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('gear');
         if (!gearFilter) {
             // document.getElementById('checkboxImageClearGears').checked = true;
             gearFilterComponent.setModel(null);
@@ -225,99 +384,101 @@ module.exports = {
 
             gearFilterComponent.setModel({
                 type: 'startsWith',
-                filter: gearFilter
+                filter: gearFilter,
             });
         }
 
-        const levelFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('level');
+        const levelFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('level');
         if (!levelFilter) {
             // document.getElementById('checkboxImageClearLevels').checked = true;
             levelFilterComponent.setModel(null);
         } else {
             // document.getElementById('checkboxImageClearLevels').checked = false;
 
-            if (levelFilter == "90") {
+            if (levelFilter == '90') {
                 levelFilterComponent.setModel({
                     type: 'equals',
-                    filter: 90
+                    filter: 90,
                 });
             }
-            if (levelFilter == "88") {
+            if (levelFilter == '88') {
                 levelFilterComponent.setModel({
                     type: 'equals',
-                    filter: 88
+                    filter: 88,
                 });
             }
-            if (levelFilter == "85") {
+            if (levelFilter == '85') {
                 levelFilterComponent.setModel({
                     type: 'equals',
-                    filter: 85
+                    filter: 85,
                 });
             }
-            if (levelFilter == "under85") {
+            if (levelFilter == 'under85') {
                 levelFilterComponent.setModel({
                     type: 'lessThan',
-                    filter: 85
+                    filter: 85,
                 });
             }
-            if (levelFilter == "0") {
+            if (levelFilter == '0') {
                 levelFilterComponent.setModel({
                     type: 'equals',
-                    filter: 0
+                    filter: 0,
                 });
             }
         }
 
-        const enhanceFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('enhance');
+        const enhanceFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('enhance');
         if (!enhanceFilter) {
             enhanceFilterComponent.setModel(null);
         } else {
-            if (enhanceFilter == "plus0") {
+            if (enhanceFilter == 'plus0') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: -1,
-                    filterTo: 3
+                    filterTo: 3,
                 });
             }
-            if (enhanceFilter == "plus3") {
+            if (enhanceFilter == 'plus3') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: 2,
-                    filterTo: 6
+                    filterTo: 6,
                 });
             }
-            if (enhanceFilter == "plus6") {
+            if (enhanceFilter == 'plus6') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: 5,
-                    filterTo: 9
+                    filterTo: 9,
                 });
             }
-            if (enhanceFilter == "plus9") {
+            if (enhanceFilter == 'plus9') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: 8,
-                    filterTo: 12
+                    filterTo: 12,
                 });
             }
-            if (enhanceFilter == "plus12") {
+            if (enhanceFilter == 'plus12') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: 11,
-                    filterTo: 15
+                    filterTo: 15,
                 });
             }
-            if (enhanceFilter == "plus15") {
+            if (enhanceFilter == 'plus15') {
                 enhanceFilterComponent.setModel({
                     filterType: 'number',
                     type: 'inRange',
                     filter: 14,
-                    filterTo: 16
+                    filterTo: 16,
                 });
             }
 
@@ -335,7 +496,8 @@ module.exports = {
             // }
         }
 
-        const statFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('main.type');
+        const statFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('main.type');
         if (!statFilter) {
             // document.getElementById('checkboxImageClearStats').checked = true;
             statFilterComponent.setModel(null);
@@ -344,82 +506,84 @@ module.exports = {
 
             statFilterComponent.setModel({
                 type: 'equals',
-                filter: statFilter
+                filter: statFilter,
             });
         }
 
         const statList = [
-            "Attack",
-            "AttackPercent",
-            "Defense",
-            "DefensePercent",
-            "Health",
-            "HealthPercent",
-            "Speed",
-            "CriticalHitChancePercent",
-            "CriticalHitDamagePercent",
-            "EffectivenessPercent",
-            "EffectResistancePercent"
-        ]
-        for (var stat of statList) {
-            itemsGrid.gridOptions.api.getFilterInstance('augmentedStats.' + stat).setModel(null);
+            'Attack',
+            'AttackPercent',
+            'Defense',
+            'DefensePercent',
+            'Health',
+            'HealthPercent',
+            'Speed',
+            'CriticalHitChancePercent',
+            'CriticalHitDamagePercent',
+            'EffectivenessPercent',
+            'EffectResistancePercent',
+        ];
+        for (const stat of statList) {
+            itemsGrid.gridOptions.api
+                .getFilterInstance('augmentedStats.' + stat)
+                .setModel(null);
         }
         if (substatFilter) {
             // const substatFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('augmentedStats.' + substatFilter);
-
             // substatFilterComponent.setModel({
             //     type: 'notEqual',
             //     filter: 0
             // });
         }
 
-        const allowedModsFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('allowedMods');
+        const allowedModsFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('allowedMods');
         if (modifyFilter) {
-
             allowedModsFilterComponent.setModel({
                 type: 'contains',
-                filter: "|" + modifyFilter + "|"
+                filter: '|' + modifyFilter + '|',
             });
         } else {
             allowedModsFilterComponent.setModel(null);
         }
 
-        const duplicateFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('duplicateId');
+        const duplicateFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('duplicateId');
         if (!duplicateFilter) {
             duplicateFilterComponent.setModel(null);
         } else {
             duplicateFilterComponent.setModel({
                 type: 'startsWith',
-                filter: "DUPLICATE"
+                filter: 'DUPLICATE',
             });
         }
 
-        const equippedOrNotFilterComponent = itemsGrid.gridOptions.api.getFilterInstance('equippedById');
+        const equippedOrNotFilterComponent =
+            itemsGrid.gridOptions.api.getFilterInstance('equippedById');
         if (!equippedOrNotFilter) {
             equippedOrNotFilterComponent.setModel(null);
         } else {
-            if (equippedOrNotFilter == "equipped") {
+            if (equippedOrNotFilter == 'equipped') {
                 equippedOrNotFilterComponent.setModel({
                     type: 'contains',
-                    filter: "-"
+                    filter: '-',
                 });
             }
 
-            if (equippedOrNotFilter == "unequipped") {
+            if (equippedOrNotFilter == 'unequipped') {
                 equippedOrNotFilterComponent.setModel({
                     filterType: 'string',
                     operator: 'AND',
                     condition1: {
                         filterType: 'string',
                         type: 'notContains',
-                        filter: '-'
+                        filter: '-',
                     },
                     condition2: {
                         filterType: 'string',
                         type: 'notContains',
-                        filter: '1'
-                    }
-
+                        filter: '1',
+                    },
 
                     // type: 'notContains',
                     // filter: '-'
@@ -429,131 +593,147 @@ module.exports = {
 
         itemsGrid.gridOptions.api.onFilterChanged();
         updateSelectedCount();
-    }
-}
-            // SAMPLE OR FILTER
-            // statFilterComponent.setModel({
-            //     // filterType: 'string',
-            //     // operator: 'OR',
-            //     // condition1: {
-            //     //     filterType: 'string',
-            //     //     type: 'notEqual',
-            //     //     filter: modifyFilter
-            //     // },
-            //     // condition2: {
-            //     //     filterType: 'string',
-            //     //     type: 'equals',
-            //     //     filter: 6
-            //     // }
-            //     type: 'notEqual',
-            //     filter: modifyFilter
-            // });
+    },
+};
+// SAMPLE OR FILTER
+// statFilterComponent.setModel({
+//     // filterType: 'string',
+//     // operator: 'OR',
+//     // condition1: {
+//     //     filterType: 'string',
+//     //     type: 'notEqual',
+//     //     filter: modifyFilter
+//     // },
+//     // condition2: {
+//     //     filterType: 'string',
+//     //     type: 'equals',
+//     //     filter: 6
+//     // }
+//     type: 'notEqual',
+//     filter: modifyFilter
+// });
 
 function renderActions(params) {
     const id = params.value;
-    return '<img class="optimizerSetIcon" id="item1" src=' + Assets.getSetAsset("SpeedSet") + '></img>';
+    return (
+        '<img class="optimizerSetIcon" id="item1" src=' +
+        Assets.getSetAsset('SpeedSet') +
+        '></img>'
+    );
 }
 
 function columnGradient(params) {
     try {
         // if (!params || params.value == undefined) return;
-        var colId = params.column.colId;
-        var value = params.value;
+        const colId = params.column.colId;
+        const value = params.value;
 
-        var agg = currentAggregate[colId];
+        const agg = currentAggregate[colId];
         if (!agg) return;
 
-        var percent = (value) / (agg.max + 1);
+        const percent = value / (agg.max + 1);
         const color = gradient.gradient.rgbAt(percent);
 
         if (percent == 0) {
             return {
-                backgroundColor: 'ffffff00'
-            }
+                backgroundColor: 'ffffff00',
+            };
         }
 
         return {
-            backgroundColor: color.toHexString()
+            backgroundColor: color.toHexString(),
         };
-    } catch (e) {console.error(e)}
-
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 function scoreColumnGradient(params) {
     try {
         if (!params || params.value == undefined) return;
-        var colId = params.column.colId;
-        var value = params.value;
+        const colId = params.column.colId;
+        const value = params.value;
 
-        // var percent = value * (80-40) + 0.4;
-        var percent = (80 * (value/80))/100
+        // let percent = value * (80-40) + 0.4;
+        let percent = (80 * (value / 80)) / 100;
         percent = Math.min(1, percent);
         percent = Math.max(0, percent);
 
         const color = scoreGradient.gradient.rgbAt(percent);
 
         return {
-            backgroundColor: color.toHexString()
+            backgroundColor: color.toHexString(),
         };
-    } catch (e) {console.error(e)}
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 function aggregateCurrentGearStats(items) {
-    console.log("Aggregating", items)
+    console.log('Aggregating', items);
     const statsToAggregate = [
-        "augmentedStats.AttackPercent",
-        "augmentedStats.Attack",
-        "augmentedStats.Speed",
-        "augmentedStats.CriticalHitChancePercent",
-        "augmentedStats.CriticalHitDamagePercent",
-        "augmentedStats.HealthPercent",
-        "augmentedStats.Health",
-        "augmentedStats.DefensePercent",
-        "augmentedStats.Defense",
-        "augmentedStats.EffectivenessPercent",
-        "augmentedStats.EffectResistancePercent"
-    ]
+        'augmentedStats.AttackPercent',
+        'augmentedStats.Attack',
+        'augmentedStats.Speed',
+        'augmentedStats.CriticalHitChancePercent',
+        'augmentedStats.CriticalHitDamagePercent',
+        'augmentedStats.HealthPercent',
+        'augmentedStats.Health',
+        'augmentedStats.DefensePercent',
+        'augmentedStats.Defense',
+        'augmentedStats.EffectivenessPercent',
+        'augmentedStats.EffectResistancePercent',
+    ];
 
-    var count = items.length;
+    const count = items.length;
 
-    for (var stat of statsToAggregate) {
-        const arrSum = arr => arr.reduce((a, b) => a + b.augmentedStats[stat.split(".")[1]], 0);
+    for (const stat of statsToAggregate) {
+        const arrSum = (arr) =>
+            arr.reduce((a, b) => a + b.augmentedStats[stat.split('.')[1]], 0);
 
-        var max = Math.max(...getField(items, stat));
-        var sum = arrSum(items);
-        var avg = sum/count;
+        const max = Math.max(...getField(items, stat));
+        const sum = arrSum(items);
+        const avg = sum / count;
 
         currentAggregate[stat] = {
             max,
             sum,
-            avg
-        }
+            avg,
+        };
     }
 
-    console.log("Aggregated", currentAggregate)
+    console.log('Aggregated', currentAggregate);
 }
 
 function getField(items, stat) {
-    return items.map(x => x.augmentedStats[stat.split(".")[1]]);
+    return items.map((x) => x.augmentedStats[stat.split('.')[1]]);
 }
 
 function renderSets(name) {
-    return '<img class="optimizerSetIcon" src=' + Assets.getSetAsset(name) + '></img>'
+    return (
+        '<img class="optimizerSetIcon" src=' +
+        Assets.getSetAsset(name) +
+        '></img>'
+    );
 }
 
 function renderGear(name) {
-    return '<img class="optimizerSetIcon" src=' + Assets.getGearAsset(name) + '></img>'
+    return (
+        '<img class="optimizerSetIcon" src=' +
+        Assets.getGearAsset(name) +
+        '></img>'
+    );
 }
 
 function renderStat(name) {
     const statEdits = {
-        "CriticalHitDamagePercent": "Crit Dmg %",
-        "CriticalHitChancePercent": "Crit Chance %",
-        "EffectivenessPercent": "Effectiveness %",
-        "EffectResistancePercent": "Effect Resist %",
-        "AttackPercent": "Attack %",
-        "HealthPercent": "Health %",
-        "DefensePercent": "Defense %",
+        CriticalHitDamagePercent: 'Crit Dmg %',
+        CriticalHitChancePercent: 'Crit Chance %',
+        EffectivenessPercent: 'Effectiveness %',
+        EffectResistancePercent: 'Effect Resist %',
+        AttackPercent: 'Attack %',
+        HealthPercent: 'Health %',
+        DefensePercent: 'Defense %',
     };
 
     return statEdits[name] || name;
@@ -574,9 +754,7 @@ function navigateCallback(selectedNode) {
     drawPreview(item);
 }
 
-function cellFocused(event) {
-
-}
+function cellFocused(event) {}
 
 async function cellMouseOver(event) {
     const item = event.data;
@@ -593,22 +771,26 @@ async function cellMouseOut(event) {
 
 async function drawPreview(item) {
     if (!item) {
-        document.getElementById("gearTabPreview").innerHTML = "";
+        document.getElementById('gearTabPreview').innerHTML = '';
         return;
     }
 
-    var baseStats = null;
+    let baseStats = null;
 
     if (!item.equippedByName) {
-
     } else {
         // baseStats = (await Api.getHeroById(item.equippedById, true)).baseStats;
         baseStats = HeroData.getBaseStatsByStars(item.equippedByName, true, 6);
     }
 
     // TODO ADD STAT SELECTOR
-    const html = HtmlGenerator.buildItemPanel(item, "itemsGrid", baseStats, "Speed")
-    document.getElementById("gearTabPreview").innerHTML = html
+    const html = HtmlGenerator.buildItemPanel(
+        item,
+        'itemsGrid',
+        baseStats,
+        'Speed'
+    );
+    document.getElementById('gearTabPreview').innerHTML = html;
 }
 
 function onRowSelected(event) {

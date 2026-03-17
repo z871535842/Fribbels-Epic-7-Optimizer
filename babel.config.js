@@ -21,25 +21,28 @@ module.exports = (api) => {
   return {
     presets: [
       // @babel/preset-env will automatically target our browserslist targets
-      require('@babel/preset-env'),
+      require('@babel/preset-env', { loose: true }),
       require('@babel/preset-typescript'),
       [require('@babel/preset-react'), { development }],
     ],
     plugins: [
+      ["@babel/plugin-proposal-class-properties", { "loose": true }],
+      ["@babel/plugin-proposal-private-methods", { "loose": true }],
+      ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
       // Stage 0
       require('@babel/plugin-proposal-function-bind'),
 
       // Stage 1
       require('@babel/plugin-proposal-export-default-from'),
       require('@babel/plugin-proposal-logical-assignment-operators'),
-      [require('@babel/plugin-proposal-optional-chaining'), { loose: false }],
+      [require('@babel/plugin-proposal-optional-chaining'), { loose: true }],
       [
         require('@babel/plugin-proposal-pipeline-operator'),
         { proposal: 'minimal' },
       ],
       [
         require('@babel/plugin-proposal-nullish-coalescing-operator'),
-        { loose: false },
+        { loose: true },
       ],
       require('@babel/plugin-proposal-do-expressions'),
 
@@ -53,7 +56,7 @@ module.exports = (api) => {
       // Stage 3
       require('@babel/plugin-syntax-dynamic-import'),
       require('@babel/plugin-syntax-import-meta'),
-      [require('@babel/plugin-proposal-class-properties'), { loose: true }],
+
       require('@babel/plugin-proposal-json-strings'),
 
       ...(development ? developmentPlugins : productionPlugins),
