@@ -149,8 +149,9 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1400,
+    width: 1600,
     height: 1000,
+    autoHideMenuBar:true,
     icon: getAssetPath('icon.png'),
     webPreferences:
       (process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true') && process.env.ERB_SECURE !== 'true' ?
@@ -166,7 +167,7 @@ const createWindow = async () => {
         contextIsolation: false
       },
   });
-
+  mainWindow.maximize();
   mainWindow.loadURL(`file://${__dirname}/app.html`);
   // mainWindow.webContents.openDevTools();
 

@@ -1,4 +1,17 @@
 <head>
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self' data:; 
+  script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
+  style-src 'self' 'unsafe-inline';
+  connect-src 'self' 
+              http://localhost:8130 
+              https://e7-optimizer-game-data.s3-accelerate.amazonaws.com;
+  img-src 'self' 
+          data: 
+          https://raw.githubusercontent.com
+          https://static.smilegatemegaport.com
+          https://e7-optimizer-game-data.s3-accelerate.amazonaws.com;
+">
 <script>
 global = globalThis //<- this should be enough
 global.$ = require('jquery');

@@ -117,9 +117,7 @@ function setTheme() {
                     }
                 },
                 axisLabel: {
-                    textStyle: {
-                        color: contrastColor
-                    }
+                    color: contrastColor
                 },
                 splitLine: {
                     lineStyle: {
@@ -165,9 +163,7 @@ function setTheme() {
             },
             toolbox: {
                 iconStyle: {
-                    normal: {
-                        borderColor: contrastColor
-                    }
+                    borderColor: contrastColor
                 }
             },
             dataZoom: {
@@ -180,22 +176,14 @@ function setTheme() {
                     color: contrastColor
                 },
                 itemStyle: {
-                    normal: {
-                        color: colorPalette[1]
-                    }
+                    color: colorPalette[1]
                 },
                 label: {
-                    normal: {
-                        textStyle: {
-                            color: contrastColor
-                        }
-                    }
+                    color: contrastColor
                 },
                 controlStyle: {
-                    normal: {
-                        color: contrastColor,
-                        borderColor: contrastColor
-                    }
+                    color: contrastColor,
+                    borderColor: contrastColor
                 }
             },
             timeAxis: axisCommon(),
@@ -211,19 +199,15 @@ function setTheme() {
             },
             gauge: {
                 title: {
-                    textStyle: {
-                        color: contrastColor
-                    }
+                    color: contrastColor
                 }
             },
             candlestick: {
                 itemStyle: {
-                    normal: {
-                        color: '#FD1050',
-                        color0: '#0CF49B',
-                        borderColor: '#FD1050',
-                        borderColor0: '#0CF49B'
-                    }
+                    color: '#FD1050',
+                    color0: '#0CF49B',
+                    borderColor: '#FD1050',
+                    borderColor0: '#0CF49B'
                 }
             }
         };
@@ -237,6 +221,7 @@ module.exports = {
         setTheme()
         function initializeBars() {
             barsIds = ['stat1bars', 'stat2bars', 'stat3bars', 'stat4bars']
+            
             for (var i = 0; i < 4; i++) {
                 var id = barsIds[i];
                 console.log(id)
@@ -706,5 +691,6 @@ module.exports = {
         buildBars('stat2bars', false, item, 1)
         buildBars('stat3bars', false, item, 2)
         buildBars('stat4bars', true, item, 3)
+        
     },
 }

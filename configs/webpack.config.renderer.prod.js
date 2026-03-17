@@ -8,7 +8,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const baseConfig = require('./webpack.config.base.js');
 
 module.exports = merge(baseConfig, {
-  devtool: false,
+  devtool: 'source-map',
   mode: 'production',
   target: 'electron-renderer',
   entry: [

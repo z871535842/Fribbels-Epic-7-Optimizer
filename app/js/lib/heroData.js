@@ -2,8 +2,8 @@ var heroesByName = {};
 var artifactsByName = {};
 var eesByName = {};
 
-var HERO_CACHE = "http://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?";
-var ARTIFACT_CACHE = "http://e7-optimizer-game-data.s3-accelerate.amazonaws.com/artifactdata.json?";
+var HERO_CACHE = "https://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?";
+var ARTIFACT_CACHE = "https://e7-optimizer-game-data.s3-accelerate.amazonaws.com/artifactdata.json?";
 
 global.TEST = true
 
@@ -20,11 +20,11 @@ function UrlExists(url, cb){
 }
 
 try {
-    UrlExists('http://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?', function(status) {
+    UrlExists('https://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?', function(status) {
         if(status === 200) {
            // file was found
            console.log('Amazon is available, using aws');
-           HERO_CACHE = "http://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?";
+           HERO_CACHE = "https://e7-optimizer-game-data.s3-accelerate.amazonaws.com/herodata.json?";
            ARTIFACT_CACHE = "http://e7-optimizer-game-data.s3-accelerate.amazonaws.com/artifactdata.json?";
         } else {
            // file not found
