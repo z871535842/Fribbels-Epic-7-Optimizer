@@ -2,32 +2,31 @@
     Contains all the api paths that the java backend uses.
 */
 
-const axios = require('axios')
+const axios = require('axios');
 
-const endpoint = "http://localhost:8130";
+const endpoint = 'http://localhost:8130';
 
 module.exports = {
-
-    setSettings: async(settings) => {
+    setSettings: async (settings) => {
         return post('/system/setSettings', settings);
     },
 
-    ocr: async(id) => {
+    ocr: async (id) => {
         return post('/ocr', {
-            id: id
+            id: id,
         });
     },
 
-    ocr2: async(id, shifted) => {
+    ocr2: async (id, shifted) => {
         return post('/ocr2', {
             id: id,
-            shifted: shifted
+            shifted: shifted,
         });
     },
 
     getBonusStats: async (id) => {
         return post('/heroes/getBonusStats', {
-            id: id
+            id: id,
         });
     },
 
@@ -71,20 +70,20 @@ module.exports = {
 
             stars: bonusStats.stars,
 
-            heroId: heroId
+            heroId: heroId,
         });
     },
 
     getSkillOptions: async (id) => {
         return post('/heroes/getSkillOptions', {
-            id: id
+            id: id,
         });
     },
 
     setSkillOptions: async (skillOptions, heroId) => {
         return post('/heroes/setSkillOptions', {
             heroId: heroId,
-            skillOptions: skillOptions
+            skillOptions: skillOptions,
         });
     },
 
@@ -98,38 +97,38 @@ module.exports = {
             rollQuality: modStats.rollQuality,
             limitRolls: modStats.limitRolls,
 
-            heroId: heroId
+            heroId: heroId,
         });
     },
 
     setBaseStats: async (baseStatsByName) => {
         return post('/heroes/setBaseStats', {
-            baseStatsByName: baseStatsByName
+            baseStatsByName: baseStatsByName,
         });
     },
 
     setArtifacts: async (artifactsByName) => {
-        var fixedModel = JSON.parse(JSON.stringify(artifactsByName))
+        var fixedModel = JSON.parse(JSON.stringify(artifactsByName));
         for (var value of Object.values(fixedModel)) {
             value.attack = value.stats.attack;
             value.health = value.stats.health;
             value.defense = value.stats.defense;
         }
         return post('/heroes/setArtifactStats', {
-            artifactStatsByName: fixedModel
+            artifactStatsByName: fixedModel,
         });
     },
 
     getBaseStats: async (name) => {
         return post('/heroes/getBaseStats', {
-            id: name
+            id: name,
         });
     },
 
     reorderHeroes: async (id, destinationIndex) => {
         return post('/heroes/reorderHeroes', {
             id: id,
-            destinationIndex: destinationIndex
+            destinationIndex: destinationIndex,
         });
     },
 
@@ -151,38 +150,38 @@ module.exports = {
 
     getItemById: async (id) => {
         return post('/items/getItemById', {
-            id: id
+            id: id,
         });
     },
 
     getItemByIngameId: async (id) => {
         return post('/items/getItemByIngameId', {
-            id: id
+            id: id,
         });
     },
 
     getItemsByIds: async (ids) => {
         return post('/items/getItemsByIds', {
-            ids: ids
+            ids: ids,
         });
     },
 
     getModItems: async (ids) => {
         return post('/optimization/getModItems', {
-            ids: ids
+            ids: ids,
         });
     },
 
     addItems: async (items) => {
         return post('/items/addItems', {
-            items: items
+            items: items,
         });
     },
 
     mergeItems: async (items, enhanceLimit) => {
         return post('/items/mergeItems', {
             items: items,
-            enhanceLimit: enhanceLimit
+            enhanceLimit: enhanceLimit,
         });
     },
 
@@ -191,86 +190,86 @@ module.exports = {
             items: items,
             mergeHeroes: mergeHeroes,
             enhanceLimit: enhanceLimit,
-            heroFilter: heroFilter
+            heroFilter: heroFilter,
         });
     },
 
     setItems: async (items) => {
         return post('/items/setItems', {
-            items: items
+            items: items,
         });
     },
 
     editItems: async (items) => {
         return post('/items/editItems', {
-            items: items
+            items: items,
         });
     },
 
     deleteItems: async (itemIds) => {
         return post('/items/deleteItems', {
-            ids: itemIds
+            ids: itemIds,
         });
     },
 
     lockItems: async (itemIds) => {
         return post('/items/lockItems', {
-            ids: itemIds
+            ids: itemIds,
         });
     },
 
     unlockItems: async (itemIds) => {
         return post('/items/unlockItems', {
-            ids: itemIds
+            ids: itemIds,
         });
     },
 
     addHeroes: async (heroes) => {
         return post('/heroes/addHeroes', {
-            heroes: heroes
+            heroes: heroes,
         });
     },
 
     setHeroes: async (heroes) => {
         return post('/heroes/setHeroes', {
-            heroes: heroes
+            heroes: heroes,
         });
     },
 
     getAllHeroes: async (useReforgeStats) => {
         const useReforgeStatsOverride = HeroesTab.getUseReforgedStats();
         return post('/heroes/getAllHeroes', {
-            useReforgeStats: useReforgeStatsOverride
+            useReforgeStats: useReforgeStatsOverride,
         });
     },
 
     removeHeroById: async (id) => {
         return post('/heroes/removeHeroById', {
-            id: id
+            id: id,
         });
     },
 
     unequipHeroById: async (id) => {
         return post('/heroes/unequipHeroById', {
-            id: id
+            id: id,
         });
     },
 
     unlockHeroById: async (id) => {
         return post('/heroes/unlockHeroById', {
-            id: id
+            id: id,
         });
     },
 
     lockHeroById: async (id) => {
         return post('/heroes/lockHeroById', {
-            id: id
+            id: id,
         });
     },
 
     unequipItems: async (ids) => {
         return post('/heroes/unequipItems', {
-            ids: ids
+            ids: ids,
         });
     },
 
@@ -279,7 +278,7 @@ module.exports = {
         const useReforgeStatsOverride = HeroesTab.getUseReforgedStats();
         return post('/heroes/getHeroById', {
             id: id,
-            useReforgeStats: useReforgeStatsOverride
+            useReforgeStats: useReforgeStatsOverride,
         });
     },
 
@@ -287,33 +286,33 @@ module.exports = {
         return post('/heroes/equipItemsOnHero', {
             heroId: heroId,
             itemIds: itemIds,
-            useReforgeStats: useReforgeStats
+            useReforgeStats: useReforgeStats,
         });
     },
 
     addBuild: async (heroId, build) => {
         return post('/heroes/addBuild', {
             heroId: heroId,
-            build: build
+            build: build,
         });
     },
     editBuild: async (heroId, build) => {
         return post('/heroes/editBuild', {
             heroId: heroId,
-            build: build
+            build: build,
         });
     },
     removeBuild: async (heroId, build) => {
         return post('/heroes/removeBuild', {
             heroId: heroId,
-            build: build
+            build: build,
         });
     },
     editResultRows: async (index, property, executionId) => {
         return post('/optimization/editResultRows', {
             index: index,
             property: property,
-            executionId: executionId
+            executionId: executionId,
         });
     },
 
@@ -323,7 +322,7 @@ module.exports = {
 
     deleteExecution: async (id) => {
         return post('/optimization/deleteExecution', {
-            id: id
+            id: id,
         });
     },
 
@@ -342,44 +341,68 @@ module.exports = {
     getResultRows: async (request) => {
         return post('/optimization/getResultRows', request);
     },
-}
+};
 
 function post(api, request) {
-    console.log("Call: ", api);
+    console.log('Call: ', api);
     return new Promise((resolve, reject) => {
-        axios.post(endpoint + api, request)
-        .then(response => {
-            // console.trace("Api call", api, request, response);
-            console.log("Api call", api, request, response);
+        axios
+            .post(endpoint + api, request)
+            .then((response) => {
+                // console.trace("Api call", api, request, response);
+                console.log('Api call', api, request, response);
 
-            if (response.data == "ERROR") {
-
-                if (api.includes("/optimization")) {
-                    console.error("Subprocess error. If you are using GPU acceleration, try disabling it on the settings tab.\n" + api);
-                    Notifier.error("Subprocess error. If you are using GPU acceleration, try disabling it on the settings tab.\n" + api);
-                } else {
-                    console.error("Subprocess error: " + api);
-                    Notifier.error("Subprocess error - " + api);
+                if (response.data == 'ERROR') {
+                    if (api.includes('/optimization')) {
+                        console.error(
+                            'Subprocess error. If you are using GPU acceleration, try disabling it on the settings tab.\n' +
+                                api
+                        );
+                        Notifier.error(
+                            'Subprocess error. If you are using GPU acceleration, try disabling it on the settings tab.\n' +
+                                api
+                        );
+                    } else {
+                        console.error('Subprocess error: ' + api);
+                        Notifier.error('Subprocess error - ' + api);
+                    }
                 }
-            }
 
-            resolve(response.data);
-        })
-        .catch(error => {
-            var errStr = error.toString() + error.stack
-            if (errStr && errStr.includes("aparapi") && errStr.includes("Ensure that OpenCL is in your PATH (windows) or in LD_LIBRARY_PATH (linux).")) {
-
-            } else if (errStr.includes("untested")) {
-
-            } else if (errStr && errStr.includes("aparapi")) {
-                console.error("Java process failed. If you are using GPU acceleration, try disabling it on the settings tab. Please try restarting your app and check that you've installed the correct version of Java.", api, request, error);
-                Notifier.error("Java process failed. If you are using GPU acceleration, try disabling it on the settings tab. Please try restarting your app and check that you've installed the correct version of Java");
-                reject(error);
-            } else {
-                console.error("Java process failed. Please try restarting your app and check that you've installed the correct version of Java.", api, request, error);
-                Notifier.error("Java process failed. Please try restarting your app and check that you've installed the correct version of Java");
-                reject(error);
-            }
-        })
-    })
+                resolve(response.data);
+            })
+            .catch((error) => {
+                var errStr = error.toString() + error.stack;
+                if (
+                    errStr &&
+                    errStr.includes('aparapi') &&
+                    errStr.includes(
+                        'Ensure that OpenCL is in your PATH (windows) or in LD_LIBRARY_PATH (linux).'
+                    )
+                ) {
+                } else if (errStr.includes('untested')) {
+                } else if (errStr && errStr.includes('aparapi')) {
+                    console.error(
+                        "Java process failed. If you are using GPU acceleration, try disabling it on the settings tab. Please try restarting your app and check that you've installed the correct version of Java.",
+                        api,
+                        request,
+                        error
+                    );
+                    Notifier.error(
+                        "Java process failed. If you are using GPU acceleration, try disabling it on the settings tab. Please try restarting your app and check that you've installed the correct version of Java"
+                    );
+                    reject(error);
+                } else {
+                    console.error(
+                        "Java process failed. Please try restarting your app and check that you've installed the correct version of Java.",
+                        api,
+                        request,
+                        error
+                    );
+                    Notifier.error(
+                        "Java process failed. Please try restarting your app and check that you've installed the correct version of Java"
+                    );
+                    reject(error);
+                }
+            });
+    });
 }
