@@ -175,7 +175,9 @@ public class ItemDb {
     public void deleteItem(final String id) {
         final Item existingItem = getItemById(id);
 
-        if (existingItem == null) return;
+        if (existingItem == null) {
+            return;
+        }
 
         final String heroId = existingItem.getEquippedById();
         final Hero hero = heroDb.getHeroById(heroId);

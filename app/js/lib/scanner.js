@@ -485,6 +485,7 @@ function launchScanner(command, scanType) {
                 console.log(bufferArray.join('').split('&').filter(x => !x.includes('DONE')))
                 data = bufferArray.join('').split('&').filter(x => !x.includes('DONE')).map(x => x.replace(/\s/g,''))
                 // data = bufferArray.join('').split('&').filter(x => !x.includes('DONE')).map(x => x.replaceAll('↵', '')).map(x => x.replaceAll('\n', '')).map(x => x.replaceAll('\r', ''))
+                console.log("data", data)
                 finishedReading(data, scanType);
             } else {
                 data.push(message);
